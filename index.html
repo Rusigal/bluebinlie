@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="You put it in the blue bin. Where did it go? California's own recycling numbers.">
+<title>Where Did It Go?</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;500;700&display=swap">
+<style>
+/* Layout: one narrow column, like a receipt from the bin — pick an item, read its fate, then the questions. Single dark look to match the shirt. */
+:root{
+  --bg:#121314; --panel:#1C1E21; --line:#2E3136;
+  --fg:#F2F0EB; --muted:#A3A7AD; --blue:#3B86F0; --blue-ink:#0B1A33; --good:#5FC48A;
+  --display:'Anton',Impact,'Arial Narrow',sans-serif;
+  --body:'Archivo',system-ui,-apple-system,sans-serif;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:17px;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding-block:48px 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:48px}
+.eyebrow{font-weight:700;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(56px,15vw,104px);line-height:.95;margin:8px 0 16px;text-wrap:balance}
+h1 span{color:var(--blue)}
+.lede{color:var(--muted);margin:0;max-width:52ch}
+h2{font-family:var(--display);font-weight:400;font-size:34px;line-height:1.05;margin:0 0 16px;text-wrap:balance}
+.items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.item{font:inherit;font-weight:500;font-size:16px;text-align:left;color:var(--fg);background:var(--panel);border:2px solid var(--line);border-radius:6px;padding:12px 14px;min-height:56px;cursor:pointer;display:flex;flex-direction:column;gap:2px}
+.item small{color:var(--muted);font-size:13px;font-weight:400}
+.item:hover{border-color:var(--muted)}
+.item:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.item[aria-pressed="true"]{background:var(--blue);border-color:var(--blue);color:var(--blue-ink)}
+.item[aria-pressed="true"] small{color:var(--blue-ink)}
+.result{border-top:2px solid var(--line);padding-top:24px;display:flex;flex-direction:column;gap:14px}
+.num{font-family:var(--display);font-size:clamp(96px,30vw,180px);line-height:.9;font-variant-numeric:tabular-nums}
+.num.low{color:var(--fg)} .num.high{color:var(--good)}
+.of{font-weight:700;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.dots{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:4px;max-width:100%}
+.dot{aspect-ratio:1;border-radius:50%;background:var(--line)}
+.dot.on{background:var(--good)}
+.verdict{margin:0;font-size:19px;max-width:52ch}
+.qs{display:flex;flex-direction:column;gap:14px;margin:0;padding:0;list-style:none}
+.qs li{font-family:var(--display);font-size:clamp(28px,7vw,40px);line-height:1.08;text-wrap:balance}
+.fact{background:var(--panel);border-radius:6px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.fact p{margin:0}
+.src{font-size:14px;color:var(--muted)}
+.src ol{margin:8px 0 0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
+a{color:var(--blue)} a:hover{color:var(--fg)}
+@media (max-width:380px){.items{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:no-preference){.dot{transition:background .25s}}
+</style>
+<style>body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+<main class="wrap">
+  <header>
+    <div class="eyebrow">You scanned a shirt</div>
+    <h1>You put it in the <span>blue bin.</span> Where did it go?</h1>
+    <p class="lede">Pick something you've thrown in there. These are California's own estimates for 2024, from CalRecycle.</p>
+  </header>
+
+  <section aria-labelledby="pick">
+    <h2 id="pick">What did you toss?</h2>
+    <div class="items" id="items" role="group" aria-label="Items"></div>
+    <div class="result" aria-live="polite">
+      <div><div class="num low" id="num">2%</div><div class="of" id="of">of these get recycled</div></div>
+      <div class="dots" id="dots" aria-hidden="true"></div>
+      <p class="verdict" id="verdict"></p>
+    </div>
+  </section>
+
+  <section class="fact">
+    <div class="eyebrow">Meanwhile</div>
+    <p>In 2024 California's Attorney General sued ExxonMobil, alleging the company spent decades selling recycling as the answer to plastic while knowing most plastic would never be recycled. The case is ongoing.</p>
+    <p>Nationally, about 5% of plastic waste gets recycled. It has never been above 9%.</p>
+  </section>
+
+  <section>
+    <h2>So ask.</h2>
+    <ul class="qs">
+      <li>Why does it have the arrows on it?</li>
+      <li>Who decided you should rinse it?</li>
+      <li>Where does your city's bin actually go?</li>
+      <li>Why are we still making it?</li>
+    </ul>
+  </section>
+
+  <footer class="src">
+    Plastic is the problem. Paper, cardboard and glass mostly do get recycled, so keep sorting those. Bottles and cans you return for CRV aren't counted here and do better.
+    <ol>
+      <li><a href="http://resource-recycling.com/plastics/2026/01/09/california-posts-initial-recycling-rates/">CalRecycle's initial SB 54 recycling rates, via Resource Recycling (Jan 2026)</a></li>
+      <li><a href="https://oag.ca.gov/node/592242">California Attorney General: lawsuit against ExxonMobil (Sept 2024)</a></li>
+      <li><a href="https://coastalcare.org/?p=71726">What actually gets recycled from Bay Area blue bins (SF Chronicle)</a></li>
+    </ol>
+  </footer>
+</main>
+
+<script>
+const ITEMS=[
+  {id:"yogurt",name:"Yogurt cup",tag:"#5 plastic",rate:2,shown:"2%",v:"About 2 in 100. The other 98 mostly end up in a landfill. You rinsed it anyway."},
+  {id:"bag",name:"Plastic bag",tag:"film",rate:5,shown:"5%",v:"About 5 in 100. Bags also jam the sorting machines, so many facilities pull them out and toss them."},
+  {id:"foam",name:"Foam takeout box",tag:"#6 Styrofoam",rate:0,shown:"<1%",v:"Under 1 in 100. Basically none."},
+  {id:"bottle",name:"Water bottle",tag:"#1 clear plastic",rate:16,shown:"16%",v:"About 16 in 100 from the bin. Bottles you return for CRV deposit do much better."},
+  {id:"jug",name:"Milk jug",tag:"#2 plastic",rate:19,shown:"19%",v:"About 19 in 100. This is the best plastic does, and it's still under one in five."},
+  {id:"box",name:"Cardboard box",tag:"paper",rate:68,shown:"68%",v:"About 68 in 100. This one mostly works. Keep doing it."},
+  {id:"jar",name:"Glass jar",tag:"glass",rate:65,shown:"65%",v:"About 65 in 100. Glass mostly works too."},
+  {id:"paper",name:"Office paper",tag:"paper",rate:71,shown:"71%",v:"About 71 in 100. Paper is the blue bin doing its job."}
+];
+const itemsEl=document.getElementById("items"),dots=document.getElementById("dots");
+for(let i=0;i<100;i++){const d=document.createElement("div");d.className="dot";dots.appendChild(d)}
+ITEMS.forEach(it=>{
+  const b=document.createElement("button");b.type="button";b.className="item";b.id="item-"+it.id;
+  b.innerHTML=it.name+"<small>"+it.tag+"</small>";
+  b.addEventListener("click",()=>pick(it.id));itemsEl.appendChild(b);
+});
+function pick(id){
+  const it=ITEMS.find(x=>x.id===id);
+  ITEMS.forEach(x=>document.getElementById("item-"+x.id).setAttribute("aria-pressed",x.id===id));
+  const n=document.getElementById("num");n.textContent=it.shown;n.className="num "+(it.rate>=50?"high":"low");
+  document.getElementById("verdict").textContent=it.v;
+  const on=Math.round(it.rate);[...dots.children].forEach((d,i)=>d.classList.toggle("on",i<on));
+}
+pick("yogurt");
+</script>
+</body>
+</html>
